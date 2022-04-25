@@ -47,7 +47,7 @@ class RegisterFragment : Fragment() {
                 email = binding.emailEditText.text.toString(),
             )
             viewModel.registerAccount(objectUser,conPassword)
-            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
+            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginTestingFragment())
         }
         navigationUi()
     }
@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
     fun navigationUi(){
         viewModel.getValidation().observe(viewLifecycleOwner){ nav ->
             if(nav != 0){
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
+                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginTestingFragment())
                 Log.d("register","testing berhasil $nav")
             }else{
                 Log.d("register","testing gagal $nav")

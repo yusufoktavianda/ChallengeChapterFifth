@@ -34,9 +34,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        viewModelUser.setUsername()
-        viewModelUser.setUsername()
+//        viewModelUser.setUsername()
+        viewModelUser.loginCheck()
         setUsername()
-//        viewModelUser.getUserData()
+        viewModelUser.getUserData()
         fetchAllData()
 
         binding.personImageView.setOnClickListener {

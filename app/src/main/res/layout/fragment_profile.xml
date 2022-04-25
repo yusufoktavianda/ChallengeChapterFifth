@@ -85,6 +85,7 @@
             android:id="@+id/birthday_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="date"
             android:hint="Enter your birthday" />
     </com.google.android.material.textfield.TextInputLayout>
 

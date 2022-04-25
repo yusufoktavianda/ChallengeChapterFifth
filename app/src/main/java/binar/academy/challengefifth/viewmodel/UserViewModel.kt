@@ -35,7 +35,7 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
     val _validation : MutableLiveData<Int> by lazy { MutableLiveData<Int>()}
     val registervalidation : MutableLiveData<Int> by lazy { MutableLiveData<Int>()}
     val username : MutableLiveData<String> by lazy { MutableLiveData<String>()}
-    val usernamenew : MutableLiveData<String> by lazy { MutableLiveData<String>()}
+    val id : MutableLiveData<String> by lazy { MutableLiveData<String>()}
     val fullname : MutableLiveData<String> by lazy { MutableLiveData<String>()}
     val birth : MutableLiveData<String> by lazy { MutableLiveData<String>()}
     val address : MutableLiveData<String> by lazy { MutableLiveData<String>()}
@@ -76,16 +76,20 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
         val emailResult = StringBuffer()
         val passwordResult = StringBuffer()
         val usernameResult = StringBuffer()
+        val idResult = StringBuffer()
         mDB = ApplicationDB.getInstance(context)
         executor.execute {
             val user = mDB?.userDao()?. getUsername(atEmail.value)
+
             Log.d("this", user.toString())
             runOnUiThread(){
                 user?.forEach {
+//                    idResult.append(it.id)
                     emailResult.append(it.email)
                     passwordResult.append(it.password)
                     usernameResult.append(it.username)
                 }
+//                id.value = idResult.toString()
                 email.value = emailResult.toString()
                 password.value = passwordResult.toString()
                 username.value = usernameResult.toString()
@@ -95,6 +99,7 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
                     _validation.postValue(1)
                     editor.putString("username_key", username.value)
                     editor.putString("password_key", password.value)
+                    editor.putString("email_key", email.value)
                     editor.apply()
                 }else{
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
@@ -104,17 +109,25 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
         }
     }
 
-    fun setUsername(){
-        val testingUser = sharedPreferences.getString("username_key", "defaultname")
-        username.value = testingUser
-    }
+//    fun setUsername(){
+//        val testingUser = sharedPreferences.getString("username_key", "defaultname")
+//        username.value = testingUser
+//    }
+
+//    fun setEmail(){
+//        val testingEmail = sharedPreferences.getString("email_key", "defaultname")
+//        email.value = testingEmail
+//    }
+
 
     fun loginCheck(){
         val shareUsernameValue = sharedPreferences.getString("username_key", "defaultname")
-        if (shareUsernameValue != "defaultname") {
+        val shareEmailValue = sharedPreferences.getString("email_key", "defaultname")
+        if (shareEmailValue != "defaultname") {
 //            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
             _validation.postValue(1)
-            username.value = shareUsernameValue
+            username.value = shareUsernameValue.toString()
+            email.value = shareEmailValue.toString()
         }  else {
             _validation.postValue(0)
         }
@@ -122,16 +135,17 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
 
     fun updateUserData(user:User){
         mDB = ApplicationDB.getInstance(context)
+        Log.d("tagemmail", " ini email dari shared $email.value.toString()")
         executor.execute {
-            val result = mDB?.userDao()?.updateData(
-                username = user.username,
-                email = email.value,
-                birthdate = user.birthDate,
-                fullname = user.fullName,
-                address = user.address
-            )
+             val result = mDB?.userDao()?.updateData(
+                 username =user.username,
+                 fullname = user.fullName,
+                 birthdate = user.birthDate,
+                 address = user.address,
+                 email = email.value
+             )
             runOnUiThread {
-                if (result != 0){
+                if (result != null){
                     Toast.makeText(context,"Update Success",Toast.LENGTH_SHORT).show()
                     getUserData()
                     editor.putString("username_key", username.value)
@@ -144,41 +158,43 @@ class UserViewModel(app : Application):AndroidViewModel(app) {
         }
     }
 
+
    fun getUserData() {
         val usernameResult = StringBuffer()
         val fullnameResult = StringBuffer()
         val birthdayResult = StringBuffer()
         val addressResult = StringBuffer()
 
-        var userName :String
-        var fullName :String
-        var birthDate : String
-        var addressName : String
+//        var userName :String
+//        var fullName :String
+//        var birthDate : String
+//        var addressName : String
         mDB = ApplicationDB.getInstance(context)
         executor.execute {
             val user = mDB?.userDao()?.getUsername(email.value)
+            Log.d("cobauser", user.toString())
             runOnUiThread{
                 user?.forEach { data->
-//                    usernameResult.append(data.username)
-//                    fullnameResult.append(data.fullName)
-//                    birthdayResult.append(data.birthDate)
-//                    addressResult.append(data.address)
-                    userName = data.username.toString()
-                    fullName = data.fullName.toString()
-                    birthDate = data.birthDate.toString()
-                    addressName = data.address.toString()
-
+                    usernameResult.append(data.username)
+                    fullnameResult.append(data.fullName)
+                    birthdayResult.append(data.birthDate)
+                    addressResult.append(data.address)
+//                    userName = data.username.toString()
+//                    fullName = data.fullName.toString()
+//                    birthDate = data.birthDate.toString()
+//                    addressName = data.address.toString()
                 }
                 username.value = usernameResult.toString()
                 fullname.value = fullnameResult.toString()
                 birth.value = birthdayResult.toString()
                 address.value = addressResult.toString()
-//                editor.putString("username_key", username.value)
-//                editor.apply()
+                editor.putString("username_key", username.value)
+                editor.apply()
             }
 
         }
     }
+
     fun logout(){
         editor.clear()
         editor.apply()

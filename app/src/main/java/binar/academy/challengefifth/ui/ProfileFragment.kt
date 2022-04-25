@@ -17,7 +17,7 @@ import binar.academy.challengefifth.viewmodel.UserViewModel
 import java.util.*
 
 class ProfileFragment : Fragment() {
-    
+
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var usernameValue = "default"
@@ -33,12 +33,14 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setUsername()
+//        viewModel.setEmail()
+        viewModel.loginCheck()
+        viewModel.getUserData()
         setField()
         binding.logoutButton.setOnClickListener {
             Toast.makeText(requireContext(), "you're logout  $usernameValue", Toast.LENGTH_SHORT).show()
             viewModel.logout()
-            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToLoginFragment())
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToLoginTestingFragment())
         }
         val calender = Calendar.getInstance()
         val year = calender.get(Calendar.YEAR)
@@ -84,6 +86,7 @@ class ProfileFragment : Fragment() {
                 birthDate = birthdateET,
                 address =  addressET
             )
+            Log.d("testing", user.toString())
             viewModel.updateUserData(user)
             setField()
         }
@@ -93,7 +96,6 @@ class ProfileFragment : Fragment() {
         viewModel.username.observe(viewLifecycleOwner) {
             if (it != "null") {
                 binding.usernameEditText.setText(it)
-                usernameValue = it
             }
         }
         viewModel.fullname.observe(viewLifecycleOwner) {

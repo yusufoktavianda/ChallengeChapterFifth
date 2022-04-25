@@ -28,41 +28,41 @@ class LoginFragment : Fragment() {
         return binding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.loginCheck()
-        showImage()
-        binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            if(email.isEmpty()||password.isEmpty()){
-                Toast.makeText(requireContext(), "Complete field!", Toast.LENGTH_SHORT).show()
-            }else{
-                viewModel.getInputan(email,password)
-                viewModel.loginAccount()
-            }
-        }
-        binding.registershowTextView.setOnClickListener {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
-        }
-        navigationUi()
-    }
-    fun navigationUi(){
-        viewModel.getValidation().observe(viewLifecycleOwner){ nav ->
-            if(nav== 1){
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-                Log.d("login", "testing berhasil $nav")
-            }else if (nav==0){
-                Log.d("login", "testing $nav")
-            }
-        }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        viewModel.loginCheck()
+//        showImage()
+//        binding.loginButton.setOnClickListener {
+//            val email = binding.emailEditText.text.toString()
+//            val password = binding.passwordEditText.text.toString()
+//            if(email.isEmpty()||password.isEmpty()){
+//                Toast.makeText(requireContext(), "Complete field!", Toast.LENGTH_SHORT).show()
+//            }else{
+//                viewModel.getInputan(email,password)
+//                viewModel.loginAccount()
+//            }
+//        }
+//        binding.registershowTextView.setOnClickListener {
+//            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+//        }
+//        navigationUi()
+//    }
+//    fun navigationUi(){
+//        viewModel.getValidation().observe(viewLifecycleOwner){ nav ->
+//            if(nav== 1){
+//                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+//                Log.d("login", "testing berhasil $nav")
+//            }else if (nav==0){
+//                Log.d("login", "testing $nav")
+//            }
+//        }
+//    }
 
-    fun showImage(){
-        Glide
-            .with(requireContext())
-            .load("https://i.ibb.co/zJHYGBP/binarlogo.jpg")
-            .centerCrop()
-            .into(binding.loginImageView)
-    }
+//    fun showImage(){
+//        Glide
+//            .with(requireContext())
+//            .load("https://i.ibb.co/zJHYGBP/binarlogo.jpg")
+//            .centerCrop()
+//            .into(binding.loginImageView)
+//    }
 }

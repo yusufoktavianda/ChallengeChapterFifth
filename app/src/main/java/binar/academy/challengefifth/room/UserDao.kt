@@ -12,7 +12,7 @@ interface UserDao {
     @Delete
     fun deleteUser(user: User)
     @Query("SELECT * FROM user WHERE email = :email")
-    fun getUsername(email:String?=null):List<User>
+    fun getUsername(email:String?):List<User>
     @Query("UPDATE User SET username = :username ,fullName=:fullname ,birthDate= :birthdate ,address= :address WHERE email= :email")
     fun updateData(email: String?=null, username:String?=null, fullname:String?=null, birthdate:String?=null, address:String?=null):Int
 }
